@@ -76,7 +76,22 @@ uint64_t PIN_FAST_ANALYSIS_CALL dopopcnt(BOOL memop, ADDRINT * memaddr, UINT32 m
 		x = 0;
 		PIN_SafeCopy(&x, memaddr, memsize);
 	} else {
-		x = regvalue->qword[0];
+		switch(memsize) {
+			case 8:
+				x = regvalue->byte[0];
+				break;
+			case 16:
+				x = regvalue->word[0];
+				break;
+			case 32:
+				x = regvalue->dword[0];
+				break;
+			case 64:
+				x = regvalue->qword[0];
+				break;
+			default:
+				*out << "Unknown operand size: " << memsize << endl;
+		}
 	}
 
 	// bit twiddling method
@@ -105,7 +120,7 @@ VOID Instruction(INS ins, VOID *v)
 								IARG_BOOL, ismem,
 								IARG_MEMORYOP_EA, 0,
 								IARG_UINT32, ismem ? INS_MemoryOperandSize(ins, 0) : 0,
-								IARG_REG_VALUE, ismem ? REG_GAX : INS_OperandReg(ins, 1),
+								IARG_REG_CONST_REFERENCE, INS_OperandReg(ins, 0),
 								IARG_END);
 		} else {
 			INS_InsertCall(ins, IPOINT_BEFORE,
@@ -114,7 +129,7 @@ VOID Instruction(INS ins, VOID *v)
 								IARG_RETURN_REGS, INS_OperandReg(ins, 0),
 								IARG_BOOL, ismem,
 								IARG_ADDRINT, 0,
-								IARG_UINT32, 0,
+								IARG_UINT32, INS_OperandWidth(ins, 1),
 								IARG_REG_CONST_REFERENCE, INS_OperandReg(ins, 1),
 								IARG_END);
 		}
