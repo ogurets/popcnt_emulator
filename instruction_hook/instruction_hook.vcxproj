@@ -28,23 +28,27 @@
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>NotSet</CharacterSet>
+    <PlatformToolset>v110</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>NotSet</CharacterSet>
+    <PlatformToolset>v110</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>NotSet</CharacterSet>
+    <PlatformToolset>v110</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>NotSet</CharacterSet>
+    <PlatformToolset>v110</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -65,22 +69,22 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>$(IncludePath)</IncludePath>
-    <ExecutablePath>C:\bin\pin-2.14-71313-msvc10-windows;$(ExecutablePath)</ExecutablePath>
+    <ExecutablePath>C:\bin\pin-2.14-71313-msvc11-windows;$(ExecutablePath)</ExecutablePath>
     <GenerateManifest>false</GenerateManifest>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>$(IncludePath)</IncludePath>
-    <ExecutablePath>C:\bin\pin-2.14-71313-msvc10-windows;$(ExecutablePath)</ExecutablePath>
+    <ExecutablePath>C:\bin\pin-2.14-71313-msvc11-windows;$(ExecutablePath)</ExecutablePath>
     <GenerateManifest>false</GenerateManifest>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>C:\bin\pin-2.14-71313-msvc10-windows\extras\components\include;C:\bin\pin-2.14-71313-msvc10-windows\extras\crt\include\kernel\uapi\asm-x86;C:\bin\pin-2.14-71313-msvc10-windows\extras\crt\include\kernel\uapi;C:\bin\pin-2.14-71313-msvc10-windows\extras\crt\include;C:\bin\pin-2.14-71313-msvc10-windows\source\include\pin\gen;C:\bin\pin-2.14-71313-msvc10-windows\source\include\pin;$(IncludePath)</IncludePath>
+    <IncludePath>C:\bin\pin-2.14-71313-msvc11-windows\extras\components\include;C:\bin\pin-2.14-71313-msvc11-windows\extras\crt\include\kernel\uapi\asm-x86;C:\bin\pin-2.14-71313-msvc11-windows\extras\crt\include\kernel\uapi;C:\bin\pin-2.14-71313-msvc11-windows\extras\crt\include;C:\bin\pin-2.14-71313-msvc11-windows\source\include\pin\gen;C:\bin\pin-2.14-71313-msvc11-windows\source\include\pin;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>C:\bin\pin-2.14-71313-msvc10-windows\extras\components\include;C:\bin\pin-2.14-71313-msvc10-windows\extras\crt\include\kernel\uapi\asm-x86;C:\bin\pin-2.14-71313-msvc10-windows\extras\crt\include\kernel\uapi;C:\bin\pin-2.14-71313-msvc10-windows\extras\crt\include;C:\bin\pin-2.14-71313-msvc10-windows\source\include\pin\gen;C:\bin\pin-2.14-71313-msvc10-windows\source\include\pin;$(IncludePath)</IncludePath>
+    <IncludePath>C:\bin\pin-2.14-71313-msvc11-windows\extras\components\include;C:\bin\pin-2.14-71313-msvc11-windows\extras\crt\include\kernel\uapi\asm-x86;C:\bin\pin-2.14-71313-msvc11-windows\extras\crt\include\kernel\uapi;C:\bin\pin-2.14-71313-msvc11-windows\extras\crt\include;C:\bin\pin-2.14-71313-msvc11-windows\source\include\pin\gen;C:\bin\pin-2.14-71313-msvc11-windows\source\include\pin;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -88,7 +92,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;TARGET_IA32;HOST_IA32;TARGET_WINDOWS;BIGARRAY_MULTIPLIER=1;_CRT_SECURE_NO_DEPRECATE;_SECURE_SCL=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\bin\pin-2.14-71313-msvc10-windows\source\include\pin;C:\bin\pin-2.14-71313-msvc10-windows\source\include\pin\gen;C:\bin\pin-2.14-71313-msvc10-windows\extras\xed-ia32\include;C:\bin\pin-2.14-71313-msvc10-windows\extras\components\include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\bin\pin-2.14-71313-msvc11-windows\source\include\pin;C:\bin\pin-2.14-71313-msvc11-windows\source\include\pin\gen;C:\bin\pin-2.14-71313-msvc11-windows\extras\xed-ia32\include;C:\bin\pin-2.14-71313-msvc11-windows\extras\components\include;</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -97,7 +101,7 @@
       <SubSystem>NotSet</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>pin.lib;libxed.lib;libcpmt.lib;libcmt.lib;pinvm.lib;kernel32.lib;ntdll-32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\bin\pin-2.14-71313-msvc10-windows\ia32\lib;C:\bin\pin-2.14-71313-msvc10-windows\ia32\lib-ext;C:\bin\pin-2.14-71313-msvc10-windows\extras\xed-ia32\lib;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\bin\pin-2.14-71313-msvc11-windows\ia32\lib;C:\bin\pin-2.14-71313-msvc11-windows\ia32\lib-ext;C:\bin\pin-2.14-71313-msvc11-windows\extras\xed-ia32\lib;</AdditionalLibraryDirectories>
       <OptimizeReferences>false</OptimizeReferences>
       <AdditionalOptions>/export:main %(AdditionalOptions)</AdditionalOptions>
     </Link>
@@ -108,7 +112,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;TARGET_IA32;HOST_IA32;TARGET_WINDOWS;BIGARRAY_MULTIPLIER=1;_CRT_SECURE_NO_DEPRECATE;_SECURE_SCL=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\bin\pin-2.14-71313-msvc10-windows\source\include\pin;C:\bin\pin-2.14-71313-msvc10-windows\source\include\pin\gen;C:\bin\pin-2.14-71313-msvc10-windows\extras\xed-ia32\include;C:\bin\pin-2.14-71313-msvc10-windows\extras\components\include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\bin\pin-2.14-71313-msvc11-windows\source\include\pin;C:\bin\pin-2.14-71313-msvc11-windows\source\include\pin\gen;C:\bin\pin-2.14-71313-msvc11-windows\extras\xed-ia32\include;C:\bin\pin-2.14-71313-msvc11-windows\extras\components\include;</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -117,7 +121,7 @@
       <SubSystem>NotSet</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>pin.lib;libxed.lib;libcpmt.lib;libcmt.lib;pinvm.lib;kernel32.lib;ntdll-64.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\bin\pin-2.14-71313-msvc10-windows\intel64\lib;C:\bin\pin-2.14-71313-msvc10-windows\intel64\lib-ext;C:\bin\pin-2.14-71313-msvc10-windows\extras\xed-intel64\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\bin\pin-2.14-71313-msvc11-windows\intel64\lib;C:\bin\pin-2.14-71313-msvc11-windows\intel64\lib-ext;C:\bin\pin-2.14-71313-msvc11-windows\extras\xed-intel64\lib</AdditionalLibraryDirectories>
       <OptimizeReferences>false</OptimizeReferences>
       <AdditionalOptions>/export:main %(AdditionalOptions)</AdditionalOptions>
     </Link>
@@ -145,13 +149,18 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;TARGET_IA32;HOST_IA32;TARGET_WINDOWS;BIGARRAY_MULTIPLIER=1;_CRT_SECURE_NO_DEPRECATE;_SECURE_SCL=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\bin\pin-2.14-71313-msvc11-windows\source\include\pin;C:\bin\pin-2.14-71313-msvc11-windows\source\include\pin\gen;C:\bin\pin-2.14-71313-msvc11-windows\extras\xed-ia32\include;C:\bin\pin-2.14-71313-msvc11-windows\extras\components\include;</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>NotSet</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>pin.lib;libxed.lib;libcpmt.lib;libcmt.lib;pinvm.lib;kernel32.lib;ntdll-64.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\bin\pin-2.14-71313-msvc11-windows\intel64\lib;C:\bin\pin-2.14-71313-msvc11-windows\intel64\lib-ext;C:\bin\pin-2.14-71313-msvc11-windows\extras\xed-intel64\lib</AdditionalLibraryDirectories>
+      <AdditionalOptions>/export:main %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

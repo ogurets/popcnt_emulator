@@ -12,7 +12,12 @@ UINT64 bblCount = 0;        //number of dynamically executed basic blocks
 UINT64 threadCount = 0;     //total number of threads, including main thread
 UINT64 invokes = 0;
 
-std::ostream * out = &cerr;
+#ifdef _WIN64
+	std::ofstream sout("inshook.log");
+	std::ofstream * out = &sout;
+#else
+	std::ostream * out = &cerr;
+#endif
 
 // This function is called before every block
 // Use the fast linkage for calls
@@ -54,6 +59,10 @@ VOID Fini(INT32 code, VOID *v)
     //*out <<  "Number of threads: " << threadCount  << endl;
 	*out <<  "Number of invocations: " << invokes  << endl;
     *out <<  "===============================================" << endl;
+
+	#ifdef _WIN64
+		sout.close();
+	#endif
 }
 
 /*uint64_t doinstruction()
@@ -66,7 +75,7 @@ VOID Fini(INT32 code, VOID *v)
 // http://kent-vandervelden.blogspot.ru/2009/10/counting-bits-population-count-and.html
 uint64_t PIN_FAST_ANALYSIS_CALL dopopcnt(BOOL memop, ADDRINT * memaddr, UINT32 memsize, PIN_REGISTER* regvalue)
 {
-    *out << "Emulate popcnt" << endl;
+    //*out << "Emulate popcnt" << endl;
 	++invokes;
 
 	// Deal with the different operand types
@@ -102,13 +111,188 @@ uint64_t PIN_FAST_ANALYSIS_CALL dopopcnt(BOOL memop, ADDRINT * memaddr, UINT32 m
 	return c;
 }
 
+// https://software.intel.com/en-us/articles/intel-64-architecture-processor-topology-enumeration/
+// This doesn't work as planned! The program thinks it runs on real Nehalem and tries to use lots of other non-implemented instructions
+#define RETURN_REGS(a,b,d,c) rax->dword[0] = (a); rbx->dword[0] = (b); rdx->dword[0] = (d); rcx->dword[0] = (c);
+void PIN_FAST_ANALYSIS_CALL docpuid_1(PIN_REGISTER* rax, PIN_REGISTER* rbx, PIN_REGISTER* rdx, PIN_REGISTER* rcx)
+{
+    // Nehalem tables
+    /*
+        00000000 ******** => 0000000b 756e6547 6c65746e 49656e69
+        00000001 ******** => 000106a5 06100800 009ce3bd bfebfbff
+        00000002 ******** => 55035a01 00f0b2e4 00000000 09ca212c
+        00000004 00000000 => 1c004121 01c0003f 0000003f 00000000
+        00000004 00000001 => 1c004122 00c0003f 0000007f 00000000
+        00000004 00000002 => 1c004143 01c0003f 000001ff 00000000
+        00000004 00000003 => 1c03c163 03c0003f 00001fff 00000002
+        00000005 ******** => 00000040 00000040 00000003 00001120
+        00000006 ******** => 00000003 00000002 00000001 00000000
+        00000007 00000000 => 00000000 00000000 00000000 00000000
+        0000000a ******** => 07300403 00000044 00000000 00000603
+        0000000b 00000000 => 00000001 00000002 00000100 00000006
+        0000000b 00000001 => 00000004 00000008 00000201 00000006
+        0000000b 00000002 => 00000000 00000000 00000002 00000006
+        0000000b 00000003 => 00000000 00000000 00000003 00000006
+        0000000b 00000004 => 00000000 00000000 00000004 00000006
+        0000000c ******** => 00000001 00000002 00000100 00000006
+        0000000d 00000000 => 00000001 00000002 00000100 00000006
+        0000000d 00000001 => 00000004 00000008 00000201 00000006
+        0000000d 00000002 => 00000000 00000000 00000002 00000006
+        0000000d 00000003 => 00000000 00000000 00000003 00000006
+        0000000d 00000004 => 00000000 00000000 00000004 00000006
+        0000000d 00000005 => 00000000 00000000 00000005 00000006
+        0000000d 00000006 => 00000000 00000000 00000006 00000006
+        0000000d 00000007 => 00000000 00000000 00000007 00000006
+        0000000d 00000008 => 00000000 00000000 00000008 00000006
+        80000000 ******** => 80000008 00000000 00000000 00000000
+        80000001 ******** => 00000000 00000000 00000001 28100800
+        80000002 ******** => 65746e49 2952286c 6f655820 2952286e
+        80000003 ******** => 55504320 20202020 20202020 45202020
+        80000004 ******** => 30323535 20402020 37322e32 007a4847
+        80000006 ******** => 00000000 00000000 01006040 00000000
+        80000007 ******** => 00000000 00000000 00000000 00000100
+        80000008 ******** => 00003028 00000000 00000000 00000000
+    */
+    switch (rax->dword[0]) {
+        case 0x00000000:
+            RETURN_REGS(0x0000000b, 0x756e6547, 0x6c65746e, 0x49656e69);
+            break;
+        case 0x00000001:
+            RETURN_REGS(0x000106a5, 0x06100800, 0x009ce3bd, 0xbfebfbff);
+            break;
+        case 0x00000002:
+            RETURN_REGS(0x55035a01, 0x00f0b2e4, 0x00000000, 0x09ca212c);
+            break;
+        case 0x00000004:
+            switch (rcx->dword[0]) {
+                case 0x00000000:
+                    RETURN_REGS(0x1c004121, 0x01c0003f, 0x0000003f, 0x00000000);
+                    break;
+                case 0x00000001:
+                    RETURN_REGS(0x1c004122, 0x00c0003f, 0x0000007f, 0x00000000);
+                    break;
+                case 0x00000002:
+                    RETURN_REGS(0x1c004143, 0x01c0003f, 0x000001ff, 0x00000000);
+                    break;
+                case 0x00000003:
+                    RETURN_REGS(0x1c03c163, 0x03c0003f, 0x00001fff, 0x00000002);
+                    break;
+            }
+            break;
+        case 0x00000005:
+            RETURN_REGS(0x00000040, 0x00000040, 0x00000003, 0x00001120);
+            break;
+        case 0x00000006:
+            RETURN_REGS(0x00000003, 0x00000002, 0x00000001, 0x00000000);
+            break;
+        case 0x00000007:
+            // FIXME: has only 1 subleaf == 0x00000000
+            RETURN_REGS(0x00000000, 0x00000000, 0x00000000, 0x00000000);
+            break;
+        case 0x0000000a:
+            RETURN_REGS(0x07300403, 0x00000044, 0x00000000, 0x00000603);
+            break;
+        case 0x0000000b:
+            switch (rcx->dword[0]) {
+                case 0x00000000:
+                    RETURN_REGS(0x00000001, 0x00000002, 0x00000100, 0x00000006);
+                    break;
+                case 0x00000001:
+                    RETURN_REGS(0x00000004, 0x00000008, 0x00000201, 0x00000006);
+                    break;
+                case 0x00000002:
+                    RETURN_REGS(0x00000000, 0x00000000, 0x00000002, 0x00000006);
+                    break;
+                case 0x00000003:
+                    RETURN_REGS(0x00000000, 0x00000000, 0x00000003, 0x00000006);
+                    break;
+                case 0x00000004:
+                    RETURN_REGS(0x00000000, 0x00000000, 0x00000004, 0x00000006);
+                    break;
+            }
+            break;
+        case 0x0000000c:
+            RETURN_REGS(0x00000001, 0x00000002, 0x00000100, 0x00000006);
+            break;
+        case 0x0000000d:
+            switch (rcx->dword[0]) {
+                case 0x00000000:
+                    RETURN_REGS(0x00000001, 0x00000002, 0x00000100, 0x00000006);
+                    break;
+                case 0x00000001:
+                    RETURN_REGS(0x00000004, 0x00000008, 0x00000201, 0x00000006);
+                    break;
+                case 0x00000002:
+                    RETURN_REGS(0x00000000, 0x00000000, 0x00000002, 0x00000006);
+                    break;
+                case 0x00000003:
+                    RETURN_REGS(0x00000000, 0x00000000, 0x00000003, 0x00000006);
+                    break;
+                case 0x00000004:
+                    RETURN_REGS(0x00000000, 0x00000000, 0x00000004, 0x00000006);
+                    break;
+                case 0x00000005:
+                    RETURN_REGS(0x00000000, 0x00000000, 0x00000005, 0x00000006);
+                    break;
+                case 0x00000006:
+                    RETURN_REGS(0x00000000, 0x00000000, 0x00000006, 0x00000006);
+                    break;
+                case 0x00000007:
+                    RETURN_REGS(0x00000000, 0x00000000, 0x00000007, 0x00000006);
+                    break;
+                case 0x00000008:
+                    RETURN_REGS(0x00000000, 0x00000000, 0x00000008, 0x00000006);
+                    break;
+            }
+            break;
+        case 0x80000000:
+            RETURN_REGS(0x80000008, 0x00000000, 0x00000000, 0x00000000);
+            break;
+        case 0x80000001:
+            RETURN_REGS(0x00000000, 0x00000000, 0x00000001, 0x28100800);
+            break;
+        case 0x80000002:
+            RETURN_REGS(0x65746e49, 0x2952286c, 0x6f655820, 0x2952286e);
+            break;
+        case 0x80000003:
+            RETURN_REGS(0x55504320, 0x20202020, 0x20202020, 0x45202020);
+            break;
+        case 0x80000004:
+            RETURN_REGS(0x30323535, 0x20402020, 0x37322e32, 0x007a4847);
+            break;
+        case 0x80000006:
+            RETURN_REGS(0x00000000, 0x00000000, 0x01006040, 0x00000000);
+            break;
+        case 0x80000007:
+            RETURN_REGS(0x00000000, 0x00000000, 0x00000000, 0x00000100);
+            break;
+        case 0x80000008:
+            RETURN_REGS(0x00003028, 0x00000000, 0x00000000, 0x00000000);
+            break;
+    }
+}
+
+// https://msdn.microsoft.com/en-us/library/hskdteyh.aspx
+void PIN_FAST_ANALYSIS_CALL docpuid(PIN_REGISTER* rax, PIN_REGISTER* rbx, PIN_REGISTER* rdx, PIN_REGISTER* rcx)
+{
+    int regs[4];
+    __cpuidex(regs, rax->dword[0], rcx->dword[0]);
+    // Apply patch here
+    if (rax->dword[0] == 1) {
+        regs[2] |= (1 << 23); // popcnt instruction support
+    }
+	rax->s_dword[0] = regs[0];
+	rbx->s_dword[0] = regs[1];
+	rcx->s_dword[0] = regs[2];
+	rdx->s_dword[0] = regs[3];
+	//PIN_Detach();
+}
+
 // Pin calls this function every time a new instruction is encountered
+// TODO: http://gurmeet.net/puzzles/fast-bit-counting-routines/
 VOID Instruction(INS ins, VOID *v)
 {
-	if (
-		//INS_Category(ins) == 
-		INS_Opcode(ins) == XED_ICLASS_POPCNT
-		) {
+	if (INS_Opcode(ins) == XED_ICLASS_POPCNT) {
 		++insCount;
 		bool ismem = INS_OperandIsMemory(ins, 1);
 		if (ismem) {
@@ -135,6 +319,16 @@ VOID Instruction(INS ins, VOID *v)
 		}
 		INS_Delete(ins);
 		// TODO: PIN_Detach(); after certain number of patched instructions
+	} else if (INS_Opcode(ins) == XED_ICLASS_CPUID) {
+        INS_InsertCall(ins, IPOINT_BEFORE,
+                            AFUNPTR(docpuid),
+                            IARG_FAST_ANALYSIS_CALL,
+                            IARG_REG_REFERENCE, REG_GAX,
+                            IARG_REG_REFERENCE, REG_GBX,
+                            IARG_REG_REFERENCE, REG_GDX,
+                            IARG_REG_REFERENCE, REG_GCX,
+                            IARG_END);
+		INS_Delete(ins);
 	}
 }
 
