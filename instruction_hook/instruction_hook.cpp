@@ -11,6 +11,7 @@ UINT64 insCount = 0;        //number of dynamically executed instructions
 UINT64 bblCount = 0;        //number of dynamically executed basic blocks
 UINT64 threadCount = 0;     //total number of threads, including main thread
 UINT64 invokes = 0;
+UINT64 cpuid_invokes = 0;
 
 #ifdef _WIN64
 	std::ofstream sout("inshook.log");
@@ -58,6 +59,7 @@ VOID Fini(INT32 code, VOID *v)
     *out <<  "Number of basic blocks: " << bblCount  << endl;
     //*out <<  "Number of threads: " << threadCount  << endl;
 	*out <<  "Number of invocations: " << invokes  << endl;
+	*out <<  "Number of cpuid invocations: " << cpuid_invokes  << endl;
     *out <<  "===============================================" << endl;
 
 	#ifdef _WIN64
@@ -285,7 +287,9 @@ void PIN_FAST_ANALYSIS_CALL docpuid(PIN_REGISTER* rax, PIN_REGISTER* rbx, PIN_RE
 	rbx->s_dword[0] = regs[1];
 	rcx->s_dword[0] = regs[2];
 	rdx->s_dword[0] = regs[3];
-	//PIN_Detach();
+	++cpuid_invokes;
+	if (cpuid_invokes >= 114)
+		PIN_Detach();
 }
 
 // Pin calls this function every time a new instruction is encountered
