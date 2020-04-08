@@ -17,7 +17,7 @@ UINT64 cpuid_invokes = 0;
 	std::ofstream sout("inshook.log");
 	std::ofstream * out = &sout;
 #else
-	std::ostream * out = &cerr;
+	std::ostream * out = &std::cerr;
 #endif
 
 // This function is called before every block
@@ -27,7 +27,7 @@ void PIN_FAST_ANALYSIS_CALL docount(ADDRINT c) { icount += c; }
 /* ===================================================================== */
 // Command line switches
 /* ===================================================================== */
-KNOB<string> KnobOutputFile(KNOB_MODE_WRITEONCE,  "pintool",
+KNOB<std::string> KnobOutputFile(KNOB_MODE_WRITEONCE,  "pintool",
     "o", "", "specify file name for MyPinTool output");
 
 KNOB<BOOL>   KnobCount(KNOB_MODE_WRITEONCE,  "pintool",
@@ -39,8 +39,8 @@ KNOB<BOOL>   KnobCount(KNOB_MODE_WRITEONCE,  "pintool",
 
 int32_t Usage()
 {
-    cerr << "This tool counts the number of dynamic instructions executed" << endl;
-	cerr << KNOB_BASE::StringKnobSummary() << endl;
+    std::cerr << "This tool counts the number of dynamic instructions executed" << std::endl;
+	std::cerr << KNOB_BASE::StringKnobSummary() << std::endl;
     return -1;
 }
 
@@ -53,14 +53,14 @@ int32_t Usage()
  */
 VOID Fini(INT32 code, VOID *v)
 {
-    *out <<  "===============================================" << endl;
-    *out <<  "MyPinTool analysis results: " << endl;
-    *out <<  "Number of instructions: " << insCount  << endl;
-    *out <<  "Number of basic blocks: " << bblCount  << endl;
-    //*out <<  "Number of threads: " << threadCount  << endl;
-	*out <<  "Number of invocations: " << invokes  << endl;
-	*out <<  "Number of cpuid invocations: " << cpuid_invokes  << endl;
-    *out <<  "===============================================" << endl;
+    *out <<  "===============================================" << std::endl;
+    *out <<  "MyPinTool analysis results: " << std::endl;
+    *out <<  "Number of instructions: " << insCount  << std::endl;
+    *out <<  "Number of basic blocks: " << bblCount  << std::endl;
+    //*out <<  "Number of threads: " << threadCount  << std::endl;
+	*out <<  "Number of invocations: " << invokes  << std::endl;
+	*out <<  "Number of cpuid invocations: " << cpuid_invokes  << std::endl;
+    *out <<  "===============================================" << std::endl;
 
 	#ifdef _WIN64
 		sout.close();
@@ -69,7 +69,7 @@ VOID Fini(INT32 code, VOID *v)
 
 /*uint64_t doinstruction()
 {
-    *out << "Emulate rdtsc " << endl;
+    *out << "Emulate rdtsc " << std::endl;
 	return 12345678LL;
 }*/
 
@@ -77,7 +77,7 @@ VOID Fini(INT32 code, VOID *v)
 // http://kent-vandervelden.blogspot.ru/2009/10/counting-bits-population-count-and.html
 uint64_t PIN_FAST_ANALYSIS_CALL dopopcnt(BOOL memop, ADDRINT * memaddr, UINT32 memsize, PIN_REGISTER* regvalue)
 {
-    //*out << "Emulate popcnt" << endl;
+    //*out << "Emulate popcnt" << std::endl;
 	++invokes;
 
 	// Deal with the different operand types
@@ -101,7 +101,7 @@ uint64_t PIN_FAST_ANALYSIS_CALL dopopcnt(BOOL memop, ADDRINT * memaddr, UINT32 m
 				x = regvalue->qword[0];
 				break;
 			default:
-				*out << "Unknown operand size: " << memsize << endl;
+				*out << "Unknown operand size: " << memsize << std::endl;
 		}
 	}
 
